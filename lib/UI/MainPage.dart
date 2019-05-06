@@ -32,9 +32,7 @@ class main_pageState extends State<main_page> {
     ];
 
     return MaterialApp(
-      theme: ThemeData(
-        primaryColor: Colors.pinkAccent[200]
-      ),
+        theme: ThemeData(primaryColor: Colors.pinkAccent[200]),
         home: DefaultTabController(
           length: 2,
           child: Scaffold(
@@ -60,47 +58,56 @@ class main_pageState extends State<main_page> {
               ),
               body: _state == 0
                   ? Container(
-                child: StreamBuilder(
-                    stream: Firestore.instance.collection('todo').where('done', isEqualTo: false).snapshots(),
-                    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
-                      return snapshot.data.documents.length == 0 ?
-                      Center(child: Text('No data found..'))
-                          :
-                      ListView(
-                          children: snapshot.data.documents.map((DocumentSnapshot document) {
-                        return CheckboxListTile(
-                          title: Text(document['title']),
-                          value: document['done'],
-                          onChanged: (bool value) {
-                            Firebase.updateTask(document.documentID, value);
-                          },
-                        );
-                      }).toList(),
-                      );
-                    })
-              )
+                      child: StreamBuilder(
+                          stream: Firestore.instance
+                              .collection('todo')
+                              .where('done', isEqualTo: false)
+                              .snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snapshot) {
+                            return snapshot.data.documents.length == 0
+                                ? Center(child: Text('No data found..'))
+                                : ListView(
+                                    children: snapshot.data.documents
+                                        .map((DocumentSnapshot document) {
+                                      return CheckboxListTile(
+                                        title: Text(document['title']),
+                                        value: document['done'],
+                                        onChanged: (bool value) {
+                                          Firebase.updateTask(
+                                              document.documentID, value);
+                                        },
+                                      );
+                                    }).toList(),
+                                  );
+                          }))
                   : Container(
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: Firestore.instance.collection('todo').where('done', isEqualTo: true).snapshots(),
-                  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                    return snapshot.data.documents.length == 0 ?
-                    Center(child: Text('No data found..'))
-                        :
-                    ListView(
-                      children: snapshot.data.documents.map((DocumentSnapshot document) {
-                        return CheckboxListTile(
-                          activeColor: Colors.deepPurpleAccent[200],
-                          title: Text(document['title']),
-                          value: document['done'],
-                          onChanged: (bool value) {
-                            Firebase.updateTask(document.documentID, value);
-                          },
-                        );
-                      }).toList(),
-                    );
-                  },
-                ),
-              )),
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: Firestore.instance
+                            .collection('todo')
+                            .where('done', isEqualTo: true)
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          return snapshot.data.documents.length == 0
+                              ? Center(child: Text('No data found..'))
+                              : ListView(
+                                  children: snapshot.data.documents
+                                      .map((DocumentSnapshot document) {
+                                    return CheckboxListTile(
+                                      activeColor: Colors.deepPurpleAccent[200],
+                                      title: Text(document['title']),
+                                      value: document['done'],
+                                      onChanged: (bool value) {
+                                        Firebase.updateTask(
+                                            document.documentID, value);
+                                      },
+                                    );
+                                  }).toList(),
+                                );
+                        },
+                      ),
+                    )),
         ));
   }
 }

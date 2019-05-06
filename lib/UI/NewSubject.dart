@@ -44,7 +44,7 @@ class NewSubjectState extends State<NewSubject> {
                 child: Text("Save"),
                 onPressed: () {
                   _formkey.currentState.validate();
-                  if(formController.text.length > 0){
+                  if (formController.text.length > 0) {
                     Firebase.addTask(formController.text.trim());
                     Navigator.pop(context);
                   }
